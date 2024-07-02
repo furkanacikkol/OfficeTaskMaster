@@ -1,14 +1,10 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using Zenject;
 
 public class WhiteBoard : MonoBehaviour
 {
-    public static event Action<WhiteBoard> OnWhiteBoardClicked;
-    
-    private void OnMouseDown()
-    {
-        OnWhiteBoardClicked?.Invoke(this);
-    }
+    [Inject] private PencilStageManager _pencilStageManager;
+
+    private void OnMouseDown() =>
+        _pencilStageManager.HandleWhiteBoardClicked(this);
 }

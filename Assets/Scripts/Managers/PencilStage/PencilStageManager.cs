@@ -1,21 +1,24 @@
-using System;
 using UnityEngine;
 using DG.Tweening;
 
-public class PencilStageManager : MonoBehaviour
+public class PencilStageManager : IStageManager
 {
     private GameObject _pencil, _whiteBoard;
     private Camera _camera;
 
     private bool _isPencilSelect;
 
+    public event System.Action StageCompleted;
     public void Initialize()
     {
-        Debug.Log("Initialize stage");
+        Debug.Log("Initialize Pencil stage");
         _camera = Camera.main;
+    }
 
-        //Pencil.OnPencilClicked += HandlePencilClicked;
-        WhiteBoard.OnWhiteBoardClicked += HandleWhiteBoardClicked;
+    public void Cleanup()
+    {
+        Debug.Log("Cleanup");
+        StageCompleted?.Invoke();
     }
 
     public void HandlePencilClicked(Pencil pencil)
@@ -24,7 +27,7 @@ public class PencilStageManager : MonoBehaviour
         _isPencilSelect = true;
     }
 
-    private void HandleWhiteBoardClicked(WhiteBoard whiteBoard)
+    public void HandleWhiteBoardClicked(WhiteBoard whiteBoard)
     {
         if (!_isPencilSelect) return;
         _whiteBoard = whiteBoard.gameObject;

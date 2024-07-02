@@ -1,10 +1,13 @@
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Serialization;
+using Zenject;
 
 [RequireComponent(typeof(LineRenderer))]
 public class PaintOnPlane : MonoBehaviour
 {
+    [Inject] private PencilStageManager _pencilStageManager;
+    
     [SerializeField] private GameObject pencilPrefab;
     [SerializeField] private Transform pencilLocation;
     [SerializeField] private float distanceThreshold = 0.1f;
@@ -17,7 +20,7 @@ public class PaintOnPlane : MonoBehaviour
     private GameObject _pencil;
 
     private int _positionIndex;
-
+    
     private void OnEnable()
     {
         _camera = Camera.main;
@@ -65,6 +68,8 @@ public class PaintOnPlane : MonoBehaviour
             _lineRenderer.enabled = false;
             _pencil.transform.DOMove(pencilLocation.position, 1f);
             _pencil.transform.DORotate(Vector3.zero, 1f);
+
+            _pencilStageManager.Cleanup();
             enabled = false;
         }
     }

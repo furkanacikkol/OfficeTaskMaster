@@ -5,6 +5,6 @@ public class PencilStageInstaller : MonoInstaller
 {
     public override void InstallBindings()
     {
-        Container.Bind<PencilStageManager>().FromComponentInHierarchy().AsSingle();
+        Container.Bind<PencilStageManager>().AsSingle();
     }
 }
