@@ -9,6 +9,7 @@ public class PencilStageManager : IStageManager
     private bool _isPencilSelect;
 
     public event System.Action StageCompleted;
+
     public void Initialize()
     {
         Debug.Log("Initialize Pencil stage");

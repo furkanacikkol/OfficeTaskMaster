@@ -9,34 +9,37 @@ public class GameManager : MonoBehaviour
     [Inject] private PencilStageManager _pencilStageManager;
     [Inject] private GlassStageManager _glassStageManager;
     private IStageManager _stageManager;
-    
+
     [SerializeField] private Transform[] cameraStageTransform;
     private Camera _camera;
     private int _currentStageIndex = 0;
+
     private void Start()
     {
+        Application.targetFrameRate = 60;
+        
         _camera = Camera.main;
         _stageManager = _pencilStageManager;
         Initialize();
     }
-    
+
     private void Initialize()
     {
         MoveCameraToNextStage();
-        _stageManager.StageCompleted += OnStageComplete;
+        if (_currentStageIndex < 2) _stageManager.StageCompleted += OnStageComplete;
         _stageManager.Initialize();
     }
-    
+
     private void OnStageComplete()
     {
         _currentStageIndex++;
         if (_currentStageIndex == 1)
             _stageManager = _glassStageManager;
-        
+
         Initialize();
     }
 
-   
+
     private void MoveCameraToNextStage()
     {
         if (_currentStageIndex < cameraStageTransform.Length)
