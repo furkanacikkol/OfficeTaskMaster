@@ -31,21 +31,21 @@ git clone https://github.com/furkanacikkol/OfficeTaskMaster.git
 ## Screenshots
 
 <p align="center">
-  <img src="Screenshots/1.png" />
+  <img src="Screenshots/1.png" width="300"/>
 </p>
 
 <p align="center">
-  <img src="Screenshots/2.png" />
+  <img src="Screenshots/2.png" width="300"/>
 </p>
 
 <p align="center">
-  <img src="Screenshots/3.png" />
+  <img src="Screenshots/3.png" width="300"/>
 </p>
 
 <p align="center">
-  <img src="Screenshots/4.png" />
+  <img src="Screenshots/4.png" width="300"/>
 </p>
 
 <p align="center">
-  <img src="Screenshots/5.png" />
+  <img src="Screenshots/5.png" width="300"/>
 </p>
