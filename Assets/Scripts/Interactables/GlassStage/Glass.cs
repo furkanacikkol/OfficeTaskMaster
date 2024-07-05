@@ -1,22 +1,34 @@
-using System;
 using DG.Tweening;
 using UnityEngine;
 using Zenject;
 
 public class Glass : MonoBehaviour
 {
+    #region Injected Fields
+
     [Inject] private GlassStageManager _glassStageManager;
     [Inject] private AudioManager _audioManager;
-    
+
+    #endregion
+
+    #region Serialized Fields
+
     public ParticleSystem waterFall;
-    
+    [SerializeField] private GameObject door;
+
+    #endregion
+
+    #region Private Fields
+
     private bool _isDragging;
     private Vector3 _offset, _firstPosition;
     private Camera _camera;
-
     private Collider _collider;
     private Renderer _renderer;
-    public enum TargetType
+
+    #endregion
+
+    private enum TargetType
     {
         WaterDrinker,
         Plant,
@@ -73,13 +85,11 @@ public class Glass : MonoBehaviour
             if (targetType == TargetType.WaterDrinker &&
                 hit.collider.TryGetComponent<WaterDrinker>(out var waterDrinker))
             {
-                Debug.Log("Water drinker found");
                 transform.DOMove(waterDrinker.waterPosition.position, 1)
                     .OnComplete(() => _glassStageManager.GlassPlacedOnWaterDrinker(this));
             }
             else if (targetType == TargetType.Plant && hit.collider.TryGetComponent<Plant>(out var plant))
             {
-                Debug.Log("Plant found");
                 transform.DOMove(plant.glassPosition.position, 1).OnComplete(
                     () =>
                     {
@@ -93,31 +103,30 @@ public class Glass : MonoBehaviour
             }
             else if (targetType == TargetType.Bin && hit.collider.CompareTag("Bin"))
             {
-                Debug.Log("Bin found");
                 var binPosition = hit.collider.transform.position;
                 transform.DOMove(binPosition + Vector3.up * .5f, 1)
                     .OnComplete(() =>
                     {
+                        HapticManager.SuccesVibrate();
                         _audioManager.PlaySound("Trash");
                         binPosition.y *= 2.25f;
                         transform.DOMove(binPosition, 0.5f);
                         transform.DORotate(Vector3.right * 60, 0.5f)
-                            .OnComplete(()=>
+                            .OnComplete(() =>
                             {
                                 _audioManager.StopSound();
                                 _glassStageManager.Cleanup();
+                                door.GetComponent<Door>().StageInitialize();
                             });
                     });
             }
             else
             {
-                Debug.Log("Target not found");
                 ResetPosition();
             }
         }
         else
         {
-            Debug.Log("Raycast did not hit anything");
             ResetPosition();
         }
     }

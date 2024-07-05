@@ -1,39 +1,40 @@
-using System;
 using UnityEngine;
 using Zenject;
 using System.Collections.Generic;
 
 public class AudioManager : MonoBehaviour
 {
-    private Dictionary<string, AudioClip> audioClips;
-    private AudioSource audioSource;
+    [Inject] private UIManager _uiManager;
+    private Dictionary<string, AudioClip> _audioClips;
+    private AudioSource _audioSource;
 
     [Inject]
     public void Construct(Dictionary<string, AudioClip> audioClips, AudioSource audioSource)
     {
-        this.audioClips = audioClips;
-        this.audioSource = audioSource;
+        this._audioClips = audioClips;
+        this._audioSource = audioSource;
     }
 
     private void Start()
     {
-        if (audioSource == null)
+        if (_audioSource == null)
         {
-            audioSource = gameObject.AddComponent<AudioSource>();
+            _audioSource = gameObject.AddComponent<AudioSource>();
         }
     }
 
     public void PlaySound(string clipName)
     {
-        if (audioSource.isPlaying && audioSource.clip != null && audioSource.clip.name == clipName) return;
+        if (_uiManager.sound == 0) return;
+        if (_audioSource.isPlaying && _audioSource.clip != null && _audioSource.clip.name == clipName) return;
 
-        if (!audioClips.TryGetValue(clipName, out var clip)) return;
-        audioSource.clip = clip;
-        audioSource.Play();
+        if (!_audioClips.TryGetValue(clipName, out var clip)) return;
+        _audioSource.clip = clip;
+        _audioSource.Play();
     }
     
     public void StopSound()
     {
-        audioSource.Stop();
+        _audioSource.Stop();
     }
 }

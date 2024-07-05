@@ -4,16 +4,23 @@ using Zenject;
 
 public class GameManager : MonoBehaviour
 {
+    #region Injected Fields
+
     [Inject] private UIManager _uiManager;
     [Inject] private PencilStageManager _pencilStageManager;
     [Inject] private GlassStageManager _glassStageManager;
     [Inject] private AudioManager _audioManager;
-    
-    private IStageManager _stageManager;
 
+    #endregion
+
+    #region Private Fields
+
+    private IStageManager _stageManager;
     [SerializeField] private Transform[] cameraStageTransform;
     private Camera _camera;
     private int _currentStageIndex = 0;
+
+    #endregion
 
     private void Start()
     {
@@ -54,10 +61,6 @@ public class GameManager : MonoBehaviour
             _camera.transform.DOMove(targetPosition.position, 1).SetDelay(1);
             _camera.transform.DORotate(targetPosition.eulerAngles, 1).SetDelay(1)
                 .OnComplete(_uiManager.ShowNextTask);
-        }
-        else
-        {
-            Debug.LogWarning("No more camera stage positions!");
         }
     }
 }

@@ -1,18 +1,27 @@
 using DG.Tweening;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Zenject;
 
 [RequireComponent(typeof(LineRenderer))]
 public class PaintOnPlane : MonoBehaviour
 {
+    #region Injected Fields
+
     [Inject] private PencilStageManager _pencilStageManager;
     [Inject] private AudioManager _audioManager;
-    
+
+    #endregion
+
+    #region Serialized Fields
+
     [SerializeField] private GameObject pencilPrefab;
     [SerializeField] private Transform pencilLocation;
     [SerializeField] private float distanceThreshold = 0.1f;
     [SerializeField] private Vector3 pencilOffset = new Vector3(1, 1);
+
+    #endregion
+
+    #region Private Fields
 
     private LineRenderer _lineRenderer;
     private Renderer _renderer;
@@ -21,6 +30,8 @@ public class PaintOnPlane : MonoBehaviour
     private GameObject _pencil;
 
     private int _positionIndex;
+
+    #endregion
 
     private void OnEnable()
     {

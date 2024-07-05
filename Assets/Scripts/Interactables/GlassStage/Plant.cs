@@ -1,17 +1,29 @@
-using System;
 using DG.Tweening;
 using UnityEngine;
 using Zenject;
 
 public class Plant : MonoBehaviour
 {
+    #region Injected Fields
+
     [Inject] private GlassStageManager _glassStageManager;
     [Inject] private AudioManager _audioManager;
-    public Transform glassPosition, newGlassPosition;
 
+    #endregion
+
+    #region Serialized Fields
+
+    public Transform glassPosition, newGlassPosition;
     [SerializeField] private GameObject waterParticleEffect;
+
+    #endregion
+
+    #region Private Fields
+
     private GameObject _plant;
     private Collider _collider;
+
+    #endregion
 
     private void Start()
     {
