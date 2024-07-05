@@ -6,11 +6,13 @@ using Zenject;
 public class Plant : MonoBehaviour
 {
     [Inject] private GlassStageManager _glassStageManager;
+    [Inject] private AudioManager _audioManager;
     public Transform glassPosition, newGlassPosition;
 
+    [SerializeField] private GameObject waterParticleEffect;
     private GameObject _plant;
     private Collider _collider;
-    
+
     private void Start()
     {
         _collider = GetComponent<Collider>();
@@ -19,9 +21,13 @@ public class Plant : MonoBehaviour
 
     public void WaterPlant()
     {
-        _plant.transform.DOScale(Vector3.one, 1).OnComplete(
-            ()=> _glassStageManager.PlantWatered(newGlassPosition));
+        _audioManager.PlaySound("Watering");
+        _plant.transform.DOScale(Vector3.one, 2.5f).OnComplete(
+            () =>
+            {
+                _audioManager.StopSound();
+                _glassStageManager.PlantWatered(newGlassPosition);
+            }
+        );
     }
-    
-    
 }

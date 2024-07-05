@@ -6,14 +6,16 @@ using Zenject;
 public class Glass : MonoBehaviour
 {
     [Inject] private GlassStageManager _glassStageManager;
+    [Inject] private AudioManager _audioManager;
+    
+    public ParticleSystem waterFall;
+    
     private bool _isDragging;
     private Vector3 _offset, _firstPosition;
     private Camera _camera;
 
     private Collider _collider;
     private Renderer _renderer;
-
-
     public enum TargetType
     {
         WaterDrinker,
@@ -82,6 +84,9 @@ public class Glass : MonoBehaviour
                     () =>
                     {
                         transform.DORotate(plant.glassPosition.rotation.eulerAngles, 0.5f);
+                        _renderer.material.DOColor(Color.white, 1).SetDelay(1);
+
+                        waterFall.Play();
                         plant.WaterPlant();
                     }
                 );
@@ -90,13 +95,18 @@ public class Glass : MonoBehaviour
             {
                 Debug.Log("Bin found");
                 var binPosition = hit.collider.transform.position;
-                transform.DOMove(binPosition + Vector3.up * .25f, 1)
+                transform.DOMove(binPosition + Vector3.up * .5f, 1)
                     .OnComplete(() =>
                     {
-                        binPosition.y *= 2f;
+                        _audioManager.PlaySound("Trash");
+                        binPosition.y *= 2.25f;
                         transform.DOMove(binPosition, 0.5f);
                         transform.DORotate(Vector3.right * 60, 0.5f)
-                            .OnComplete(()=>_glassStageManager.Cleanup());
+                            .OnComplete(()=>
+                            {
+                                _audioManager.StopSound();
+                                _glassStageManager.Cleanup();
+                            });
                     });
             }
             else

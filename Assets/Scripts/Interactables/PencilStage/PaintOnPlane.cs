@@ -7,6 +7,7 @@ using Zenject;
 public class PaintOnPlane : MonoBehaviour
 {
     [Inject] private PencilStageManager _pencilStageManager;
+    [Inject] private AudioManager _audioManager;
     
     [SerializeField] private GameObject pencilPrefab;
     [SerializeField] private Transform pencilLocation;
@@ -20,7 +21,7 @@ public class PaintOnPlane : MonoBehaviour
     private GameObject _pencil;
 
     private int _positionIndex;
-    
+
     private void OnEnable()
     {
         _camera = Camera.main;
@@ -51,6 +52,7 @@ public class PaintOnPlane : MonoBehaviour
 
                     if (_positionIndex == 0 || Vector3.Distance(hitPoint, _previousPosition) > distanceThreshold)
                     {
+                        _audioManager.PlaySound("PencilSound");
                         _lineRenderer.positionCount++;
                         _lineRenderer.SetPosition(_positionIndex, hitPoint);
                         _previousPosition = hitPoint;
@@ -64,10 +66,11 @@ public class PaintOnPlane : MonoBehaviour
 
         if (Input.GetMouseButtonUp(0))
         {
+            _audioManager.StopSound();
             _renderer.material.SetColor("_Color", Color.black);
             _lineRenderer.enabled = false;
             _pencil.transform.DOMove(pencilLocation.position, 1f);
-            _pencil.transform.DORotate(Vector3.zero, 1f);
+            _pencil.transform.DORotate(new Vector3(0, 180, 0), 1f);
 
             _pencilStageManager.Cleanup();
             enabled = false;
